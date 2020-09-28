@@ -1,0 +1,247 @@
+---
+title: "Lab 3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+dat <- readxl::read_xls('D:/DS 202/GSS.xls')
+library(dplyr)
+library(ggplot2)
+```
+
+# 1
+
+**Answers**
+
+* On average the year of school completed for all political parties is 12 years
+
+* The second highest for most political parties is 16 years
+
+* Something interesting is that the spread of years is fairly consistent between all political parties even if the counts for a political party is much lower than others
+```{r, warning=FALSE}
+
+
+EducPolitical <- select(dat, "Political party affiliation", "Highest year of school completed")
+EducPolitical <- EducPolitical[EducPolitical$`Political party affiliation`!= "Don't know",]
+EducPolitical <- EducPolitical[EducPolitical$`Political party affiliation`!= "No answer",]
+EducPolitical <- EducPolitical[EducPolitical$`Highest year of school completed` != "Don't know",]
+EducPolitical <- EducPolitical[EducPolitical$`Highest year of school completed` != "No answer",]
+
+total <- data.frame(table(EducPolitical))
+
+g <- ggplot(total, aes(x=Highest.year.of.school.completed, weight=Freq, fill=Political.party.affiliation)) + geom_bar(position=position_dodge())
+g + scale_x_discrete(limits=c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"))
+
+StrongRepublican <- EducPolitical[EducPolitical$`Political party affiliation`=="Strong republican",]
+StrongDemocrat <- EducPolitical[EducPolitical$`Political party affiliation`=="Strong democrat",]
+OtherParty <- EducPolitical[EducPolitical$`Political party affiliation`=="Other party",]
+NotStrRepublican <- EducPolitical[EducPolitical$`Political party affiliation`=='Not str republican',]
+NotStrDemocrat <- EducPolitical[EducPolitical$`Political party affiliation`=='Not str democrat',]
+Independent <- EducPolitical[EducPolitical$`Political party affiliation`=="Independent",]
+IndNearDem <- EducPolitical[EducPolitical$`Political party affiliation`=="Ind,near dem",]
+IndNearRem <- EducPolitical[EducPolitical$`Political party affiliation`=="Ind,near rep",]
+
+StrongRepublican <- data.frame(table(StrongRepublican))
+StrongDemocrat <- data.frame(table(StrongDemocrat))
+OtherParty <- data.frame(table(OtherParty))
+NotStrRepublican <- data.frame(table(NotStrRepublican))
+NotStrDemocrat <- data.frame(table(NotStrDemocrat))
+Independent <- data.frame(table(Independent))
+IndNearDem <- data.frame(table(IndNearDem))
+IndNearRem <- data.frame(table(IndNearRem))
+
+sr <- ggplot(StrongRepublican, aes(x=Highest.year.of.school.completed, weight=Freq)) + geom_bar()
+sr + ggtitle("StrongRepublican") + scale_x_discrete(limits=c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"))
+
+sr <- ggplot(StrongDemocrat, aes(x=Highest.year.of.school.completed, weight=Freq)) + geom_bar()
+sr + ggtitle("StrongDemocrat") + scale_x_discrete(limits=c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"))
+
+sr <- ggplot(OtherParty, aes(x=Highest.year.of.school.completed, weight=Freq)) + geom_bar()
+sr + ggtitle("OtherParty") + scale_x_discrete(limits=c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"))
+
+sr <- ggplot(NotStrRepublican, aes(x=Highest.year.of.school.completed, weight=Freq)) + geom_bar()
+sr + ggtitle("NotStrRepublican") + scale_x_discrete(limits=c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"))
+
+sr <- ggplot(NotStrDemocrat, aes(x=Highest.year.of.school.completed, weight=Freq)) + geom_bar()
+sr + ggtitle("NotStrDemocrat") + scale_x_discrete(limits=c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"))
+
+sr <- ggplot(Independent, aes(x=Highest.year.of.school.completed, weight=Freq)) + geom_bar()
+sr + ggtitle("Independent") + scale_x_discrete(limits=c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"))
+
+sr <- ggplot(IndNearDem, aes(x=Highest.year.of.school.completed, weight=Freq)) + geom_bar()
+sr + ggtitle("IndNearDem") + scale_x_discrete(limits=c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"))
+
+sr <- ggplot(IndNearRem, aes(x=Highest.year.of.school.completed, weight=Freq)) + geom_bar()
+sr + ggtitle("IndNearRem") + scale_x_discrete(limits=c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"))
+
+```
+
+# 2
+
+```{r, warning=FALSE}
+EducPolitical <- select(dat, "Political party affiliation", "Highest year of school completed")
+EducPolitical <- EducPolitical[EducPolitical$`Political party affiliation`!= "Don't know",]
+EducPolitical <- EducPolitical[EducPolitical$`Political party affiliation`!= "No answer",]
+EducPolitical <- EducPolitical[EducPolitical$`Highest year of school completed` != "Don't know",]
+EducPolitical <- EducPolitical[EducPolitical$`Highest year of school completed` != "No answer",]
+
+EducPolitical <- filter(EducPolitical, "Highest year of school completed" > 12)
+str(EducPolitical)
+EducPolitical
+```
+
+# 3
+
+**Answer**
+
+*In all marital statuses there are more people who are happy than not too happy
+
+*The marital status with the most happy people are those who are married
+
+*The marital status with the second most happy people are those who never married
+
+```{r, warning=FALSE}
+MarriageHappiness <- select(dat, "General happiness", "Marital status")
+MarriageHappiness <- MarriageHappiness[MarriageHappiness$`General happiness`!= "Don't know",]
+MarriageHappiness <- MarriageHappiness[MarriageHappiness$`General happiness`!= "No answer",]
+MarriageHappiness <- MarriageHappiness[MarriageHappiness$`General happiness`!= "Not applicable",]
+MarriageHappiness <- MarriageHappiness[MarriageHappiness$`General happiness`!= "Data collection: General Social Survey Case Selection: all cases",]
+MarriageHappiness <- MarriageHappiness[MarriageHappiness$`Marital status` != "Don't know",]
+MarriageHappiness <- MarriageHappiness[MarriageHappiness$`Marital status` != "No answer",]
+
+table <- data.frame(table(MarriageHappiness))
+
+Widowed <- table[table$Marital.status=="Widowed",]
+Separated <- table[table$Marital.status=="Separated",]
+NeverMarried <- table[table$Marital.status=="Never married",]
+Married <- table[table$Marital.status=="Married",]
+Divorced <- table[table$Marital.status=="Divorced",]
+
+Widowed
+Separated
+NeverMarried
+Married
+Divorced
+
+g <- ggplot(table, aes(x=Marital.status, weight=Freq, fill=General.happiness)) + geom_bar(position=position_dodge())
+g
+```
+
+# 4
+
+**Answer**
+
+*Being associated with different parties does not heavily affect the relationship between marital status and happiness
+
+*The relationship still looks the same with all marital statuses having more happy people than not happy people
+
+```{r}
+MarriageHappinessParty <- select(dat, "General happiness", "Marital status", "Political party affiliation")
+MarriageHappinessParty <- MarriageHappinessParty[MarriageHappinessParty$`General happiness`!= "Don't know",]
+MarriageHappinessParty <- MarriageHappinessParty[MarriageHappinessParty$`General happiness`!= "No answer",]
+MarriageHappinessParty <- MarriageHappinessParty[MarriageHappinessParty$`General happiness`!= "Not applicable",]
+MarriageHappinessParty <- MarriageHappinessParty[MarriageHappinessParty$`General happiness`!= "Data collection: General Social Survey Case Selection: all cases",]
+MarriageHappinessParty <- MarriageHappinessParty[MarriageHappinessParty$`Marital status` != "Don't know",]
+MarriageHappinessParty <- MarriageHappinessParty[MarriageHappinessParty$`Marital status` != "No answer",]
+MarriageHappinessParty <- MarriageHappinessParty[MarriageHappinessParty$`Political party affiliation`!= "Don't know",]
+MarriageHappinessParty <- MarriageHappinessParty[MarriageHappinessParty$`Political party affiliation`!= "No answer",]
+
+StrongRepublican <- data.frame(table(MarriageHappinessParty[MarriageHappinessParty$`Political party affiliation`=="Strong republican",]))
+StrongDemocrat <- data.frame(table(MarriageHappinessParty[MarriageHappinessParty$`Political party affiliation`=="Strong democrat",]))
+OtherParty <- data.frame(table(MarriageHappinessParty[MarriageHappinessParty$`Political party affiliation`=="Other party",]))
+NotStrRepublican <- data.frame(table(MarriageHappinessParty[MarriageHappinessParty$`Political party affiliation`=='Not str republican',]))
+NotStrDemocrat <- data.frame(table(MarriageHappinessParty[MarriageHappinessParty$`Political party affiliation`=='Not str democrat',]))
+Independent <- data.frame(table(MarriageHappinessParty[MarriageHappinessParty$`Political party affiliation`=="Independent",]))
+IndNearDem <- data.frame(table(MarriageHappinessParty[MarriageHappinessParty$`Political party affiliation`=="Ind,near dem",]))
+IndNearRem <- data.frame(table(MarriageHappinessParty[MarriageHappinessParty$`Political party affiliation`=="Ind,near rep",]))
+
+g <- ggplot(StrongRepublican, aes(x=Marital.status, weight=Freq, fill=General.happiness)) + geom_bar(position=position_dodge())
+g + ggtitle("StrongRepublican")
+
+g <- ggplot(StrongDemocrat, aes(x=Marital.status, weight=Freq, fill=General.happiness)) + geom_bar(position=position_dodge())
+g + ggtitle("StrongDemocrat")
+
+g <- ggplot(OtherParty, aes(x=Marital.status, weight=Freq, fill=General.happiness)) + geom_bar(position=position_dodge())
+g + ggtitle("OtherParty")
+
+g <- ggplot(NotStrRepublican, aes(x=Marital.status, weight=Freq, fill=General.happiness)) + geom_bar(position=position_dodge())
+g + ggtitle("NotStrRepublican")
+
+g <- ggplot(NotStrDemocrat, aes(x=Marital.status, weight=Freq, fill=General.happiness)) + geom_bar(position=position_dodge())
+g + ggtitle("NotStrDemocrat")
+
+g <- ggplot(Independent, aes(x=Marital.status, weight=Freq, fill=General.happiness)) + geom_bar(position=position_dodge())
+g + ggtitle("Independent")
+
+g <- ggplot(IndNearDem, aes(x=Marital.status, weight=Freq, fill=General.happiness)) + geom_bar(position=position_dodge())
+g + ggtitle("IndNearDem")
+
+g <- ggplot(IndNearRem, aes(x=Marital.status, weight=Freq, fill=General.happiness)) + geom_bar(position=position_dodge())
+g + ggtitle("IndNearRem")
+```
+
+
+# 5
+
+**Answer**
+
+*Married is the highest among all of the school years from 2 onward
+
+*There are very few in the low and high categories of the school years because most people at least go to public education like elementary and middle school so very few people are below the 8 year mark. 
+
+*Also very few people pursue a masters or phd degree which would put them in the 16+ years of school completed
+
+*The highest count for marital status is married with the highest year of school completed at 12 
+
+```{R}
+MarriageEducation <- select(dat, "Marital status", "Highest year of school completed")
+MarriageEducation <- MarriageEducation[MarriageEducation$`Marital status` != "Don't know",]
+MarriageEducation <- MarriageEducation[MarriageEducation$`Marital status` != "No answer",]
+MarriageEducation <- MarriageEducation[MarriageEducation$`Highest year of school completed` != "Don't know",]
+MarriageEducation <- MarriageEducation[MarriageEducation$`Highest year of school completed` != "No answer",]
+
+table <- data.frame(table(MarriageEducation))
+
+g <- ggplot(table, aes(x=Highest.year.of.school.completed, weight=Freq, fill=Marital.status)) + geom_bar(position=position_dodge())
+g + scale_x_discrete(limits=c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"))
+```
+
+
+# 6a
+
+**Answer**
+
+*In almost all cases there are more females than males who have degrees
+
+*Only exception is the graduate degree where males have more by a slight margin
+
+```{r}
+SexDegree <- select(dat, "Respondents sex", "Rs highest degree")
+SexDegree <- SexDegree[SexDegree$`Rs highest degree` != "Don't know",]
+SexDegree <- SexDegree[SexDegree$`Rs highest degree` != "No answer",]
+
+table <- data.frame(table(SexDegree))
+
+g <- ggplot(table, aes(x=Rs.highest.degree, weight=Freq, fill=Respondents.sex)) + geom_bar(position = position_dodge())
+g
+```
+
+
+# 6b
+
+**Answer**
+
+*There are a lot more females for all of the political parties except 'ind, near rep' and 'other party'
+
+*This is most likely due to there being more females who responded to the ballot
+
+```{r}
+rep <- select(dat, "Respondents sex", "Political party affiliation")
+rep <- rep[rep$`Political party affiliation`!= "Don't know",]
+rep <- rep[rep$`Political party affiliation`!= "No answer",]
+
+table <- data.frame(table(rep))
+
+g <- ggplot(table, aes(x=Political.party.affiliation, weight=Freq, fill=Respondents.sex)) + geom_bar(position = position_dodge())
+g + theme(axis.text.x = element_text(angle = -90))
+```
